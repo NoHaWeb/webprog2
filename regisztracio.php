@@ -6,6 +6,7 @@
         $nev = trim($_POST["nev"]);
         $felhasznalo = trim($_POST["felhasznalo"]);
         $jelszo = trim($_POST["jelszo"]);
+        $auth = trim($_POST["beosztas"]);
 
         // Üres mezők ellenőrzése
         if (empty($nev) || empty($felhasznalo) || empty($jelszo)) {
@@ -58,7 +59,7 @@
 
 
 
-            $query = "INSERT INTO felhasznalok (nev, felhasznalonev, jelszo, auth) VALUES (:nev, :felhasznalo, :jelszo, 0)";
+            $query = "INSERT INTO felhasznalok (nev, felhasznalonev, jelszo, auth) VALUES (:nev, :felhasznalo, :jelszo, :auth)";
             $statement = $pdo->prepare($query);
 
             $jelszo = md5($jelszo);
@@ -66,7 +67,8 @@
             array(
                 ':nev' => $nev, 
                 ':felhasznalo' => $felhasznalo, 
-                ':jelszo' => $jelszo
+                ':jelszo' => $jelszo,
+                ':auth' => $auth
             )
             );
 
