@@ -19,4 +19,9 @@ class Database {
         $statement->execute($params);
         return $statement;
     }
+    public function fall($query) {
+        $statement = $this->pdo->prepare($query);
+        $statement->execute();
+        return $statement->fetchAll();
+    }
 }

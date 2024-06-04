@@ -6,11 +6,11 @@
 <form action="bejelentkezes.php" method="POST">
     <tr>
         <td><label for="felhasznalo">Felhasználónév:</label></td>
-        <td><input type="text" id="felhasznalo" name="felhasznalo" value="user"></td>
+        <td><input type="text" id="felhasznalo" name="felhasznalo" value="Ugyvezeto123"></td>
     </tr>
     <tr>
         <td><label for="jelszo">Jelszó:</label></td>
-        <td><input type="password" id="jelszo" name="jelszo" value="user"></td>
+        <td><input type="password" id="jelszo" name="jelszo" value="Ugyvezeto123"></td>
     </tr>
     <tr>
         <td><input type="submit" value="Bejelentkezés"></td>

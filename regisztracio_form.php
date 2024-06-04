@@ -26,7 +26,7 @@ $beok = $pdo->query($query)->fetchAll(PDO::FETCH_OBJ);
             <td><input type="password" id="jelszo" name="jelszo" required></td>
         </tr>
         <tr>
-            <td><label for="jelszo">Beosztas:</label></td>
+            <td><label for="jelszo">Beosztás:</label></td>
             <td>
                 <select id="beosztas" name="beosztas">
                     <?php foreach($beok as $beo): ?>
