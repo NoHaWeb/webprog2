@@ -2,6 +2,7 @@
     <?php switch ($_SESSION['auth']) {
         case '1':
             echo '<a href="index.php?p=3">Termékek</a>';
+            echo '<a href="index.php?p=15">Kategóriák</a>';  
             echo '<a href="index.php?p=4">Eladások</a>';
             echo '<a href="index.php?p=5">Beszerzések</a>';
             echo '<a href="index.php?p=6">Visszatérítések</a>';

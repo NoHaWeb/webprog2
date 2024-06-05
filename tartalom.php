@@ -24,7 +24,7 @@ if (isset($_SESSION['id'])) {
         $p = 3;
     }
     if (isset($_GET['p']) && !empty($_GET['p'])) {
-        if ($_GET['p'] > 14) {
+        if ($_GET['p'] > 20) {
             $p = 13;
         } else {
             $p = $_GET['p'];

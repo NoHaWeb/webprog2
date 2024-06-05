@@ -1,49 +1,24 @@
+
 <?php
-require_once 'db_kapcsolat.php';
-require_once 'crud.php';
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $pdo = new PDO('mysql:hostname=localhost;dbname=web2', 'root', '');
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-$db = new Database();
-$crudManager = new CRUDManager($db);
+    $nev = $_POST['nev'];
+    $kategoria = $_POST['kategoria'];
+    $id = $_POST['id'];
 
-// Példa insert művelet
-// $data = array("name" => "John", "age" => 30);
-// $crudManager->performCRUD("insert", "users", $data);
+    $termek_qry = "INSERT INTO termekek SET termek_nev = ?";
+    $statement = $pdo->prepare($termek_qry);
+    $statement->execute([$nev]);
 
-// Példa select művelet
-$result = $crudManager->performCRUD("select", "termekek", "", "");
+    $stmt = $pdo->query('SELECT MAX(termek_id) AS latest_id FROM termekek');
+    $row = $stmt->fetch();
+    $latest_id = $row['latest_id'];
 
-$sql = "SELECT termekek.termek_id, kategoriak.kategoria_nev FROM termek_kategoriak
- INNER JOIN termekek ON termekek.termek_id = termek_kategoriak.termek_id
- INNER JOIN kategoriak ON kategoriak.kategoria_id = termek_kategoriak.kategoria_id
- ";
-$termekek = $db->fall($sql);
-
+    $kategoria_qry = "INSERT INTO termek_kategoriak SET termek_id = ?, kategoria_id = ?";
+    $statement = $pdo->prepare($kategoria_qry);
+    $statement->execute([$latest_id, $kategoria]);
+    header('Location:index.php?p=3');
+}
 ?>
-<div class="table table-lg table-info table-bordered border-primary">
-    <table>
-        <thead>
-            <tr>
-                <th scope="col" class="ps-3">Sorszám</th>
-                <th scope="col" class="ps-3">Név</th>
-                <th scope="col" class="ps-3">Kategória</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php foreach ($result as $row): ?>
-
-                <tr>
-                    <td class="ps-3 pe-3"> <?php echo $row['termek_id'] ?></td>
-                    <td class="ps-3 pe-3"><?php echo $row['termek_nev'] ?></td>
-                    <?php
-                    foreach ($termekek as $termek){
-                        if ($row['termek_id'] == $termek[0]) {
-                            echo'<td class="ps-3 pe-3">'. $termek[1].'</td>';
-                        }
-                    }
-                    ?>
-                    
-                </tr>
-            <?php endforeach; ?>
-        </tbody>
-    </table>
-</div>

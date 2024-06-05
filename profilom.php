@@ -68,7 +68,7 @@ $beosztasok = $db-> fall($query);
                 <button type="button" id="szerkeszt">SZERKESZT</button>
             </td>
             <td>
-                <input type="submit" value="Módosítás" disabled>
+                <input type="submit" value="JÓVÁHAGY" disabled>
             </td>
         </tr>
     </table>

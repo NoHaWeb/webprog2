@@ -10,7 +10,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $query = "UPDATE felhasznalok SET nev = ?, felhasznalonev = ?, auth = ? WHERE id = ?";
     $statement = $pdo->prepare($query);
     $statement->execute([$nev, $felhasznalonev, $auth, $_POST['id']]);
-    
+    session_start();
+    $_SESSION['auth'] = $auth;
+    session_write_close();
     echo "<script>alert('A módosítás sikeresen megtörtént!');</script>";
     header('Refresh: 0; url=index.php?p=12');
 }

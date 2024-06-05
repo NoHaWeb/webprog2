@@ -4,7 +4,7 @@ body {
   main{
     margin: 2rem auto;
     width: auto;
-    position: fixed;
+    position: absolute;
     left: 125px;
   }
   /* @media (min-width: 991.98px) {
