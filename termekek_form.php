@@ -19,56 +19,44 @@ $termekek = $db->fall($sql);
 $userid = $_SESSION['id'];
 $kategoriak = $crudManager->performCRUD("select", "kategoriak", "", "");
 ?>
-<h2>Új termék felvitele</h2>
-<form action="termekek.php" method="POST">
-    <table>
-        <input type="hidden" name="id" value="<?php echo $userid ?>">
-        <tr>
-            <td>
-                <label for="nev">Termék neve:</label>
-            </td>
-            <pre>
-                <td>
-                    <input type="text" name="nev" id="nev" required>                
-                </td>
-            </pre>
-        </tr>
-        <tr>
-            <td>
-                <label for="kategoria">Kategória: </label>
-            </td>
-            <pre>
-                <td>
+<div class="container text-center">
+    <div class="row justify-content-evenly">
+        <div class="col-6 kistabla">
+            <h3>Új termék felvitele</h3>
+            <form action="termekek.php" method="POST">
+                <div class="m-1">
+                    <input type="hidden" name="id" value="<?php echo $userid ?>">
 
-                <select name="kategoria" id="kategoria">
- -->                <?php foreach ($kategoriak as $kategoria): ?>
-                                <option value="<?php echo $kategoria['kategoria_id']; ?>">
-                                <?php echo $kategoria['kategoria_nev'] ?></option>
-                    <?php endforeach; ?>
-                </select>
-                </td>
-            </pre>
-        </tr>
-        <tr>
-            <td>
-                <input type="submit" value="JÓVÁHAGY">
-            </td>
-        </tr>
-    </table>
-</form>
+                    <label class="form-label" for="nev">Termék neve:</label>
+                    <input type="text" class="form-control" name="nev" id="nev" required>
 
-<br>
-<hr><br>
-<h2>Új termék feltöltése</h2>
-<form enctype="multipart/form-data" method="post" action="termek_feltoltes.php">
-    <input type="file" name="file" accept=".csv">
-    <input type="submit" name="submit" value="Feltöltés">
-</form>
+                    <label class="form-label" for="kategoria">Kategória: </label>
+                    <select class="form-select" name="kategoria" id="kategoria">
+                        --> <?php foreach ($kategoriak as $kategoria): ?>
+                            <option value="<?php echo $kategoria['kategoria_id']; ?>">
+                                <?php echo $kategoria['kategoria_nev'] ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                    <hr>
+                    <input type="submit" class="p-2" value="JÓVÁHAGY">
 
+                </div>
+            </form>
+        </div>
+        <div class="col-6 kistabla">
+            <h3 class="">Új termék feltöltése</h3><br>
+            <form class="row" enctype="multipart/form-data" method="post" action="termek_feltoltes.php">
+                <input type="file" name="file" accept=".csv"><br><br>
+                <input type="submit" name="submit" value="Feltöltés">
+            </form>
+        </div>
+    </div>
+</div>
 <br>
 <hr><br>
 
-<div>
+<div class="kistabla" style="width: 100%">
     <table class="table table-sm table-info table-borderless" id="table" data-show-header="true" data-pagination="true"
         data-id-field="name" data-page-list="[5, 10, 25, 50, 100, ALL]" data-page-size="5">
         <thead>
@@ -81,7 +69,6 @@ $kategoriak = $crudManager->performCRUD("select", "kategoriak", "", "");
         </thead>
         <tbody>
             <?php foreach ($result as $row): ?>
-
                 <tr>
                     <td class="ps-3 pe-3"> <?php echo $row['termek_id'] ?></td>
                     <td class="ps-3 pe-3"><?php echo $row['termek_nev'] ?></td>
