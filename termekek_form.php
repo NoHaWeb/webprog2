@@ -116,4 +116,4 @@ $kategoriak = $crudManager->performCRUD("select", "kategoriak", "", "");
     </div>
     <div class="container justify-content-center ms-5"><span>Page: </span><span id="page"></span></div>
 </div>
-<script src="pagination.js"></script>
+<script src="elemek/pagination.js"></script>

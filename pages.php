@@ -5,6 +5,7 @@
     define("4", "eladasok.php");
     define("5", "beszerzesek.php");
     define("6", "visszateritesek.php");
+    define("16", "raktarak.php");
     define("7", "raktarkeszlet_mozgas.php");
     define("8", "beszallitok.php");
     define("9", "ugyfelek.php");
