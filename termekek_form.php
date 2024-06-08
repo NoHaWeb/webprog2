@@ -4,12 +4,6 @@ require_once 'crud.php';
 
 $db = new Database();
 $crudManager = new CRUDManager($db);
-
-// Példa insert művelet
-// $data = array("name" => "John", "age" => 30);
-// $crudManager->performCRUD("insert", "users", $data);
-
-// Példa select művelet
 $result = $crudManager->performCRUD("select", "termekek", "", "");
 
 $sql = "SELECT termekek.termek_id, kategoriak.kategoria_nev FROM termek_kategoriak
@@ -20,15 +14,15 @@ $userid = $_SESSION['id'];
 $kategoriak = $crudManager->performCRUD("select", "kategoriak", "", "");
 ?>
 <div class="container text-center">
-    <div class="row justify-content-evenly">
+    <div class="row justify-content-around">
         <div class="col-6 kistabla">
             <h3>Új termék felvitele</h3>
             <form action="termekek.php" method="POST">
                 <div class="m-1">
                     <input type="hidden" name="id" value="<?php echo $userid ?>">
 
-                    <label class="form-label" for="nev">Termék neve:</label>
-                    <input type="text" class="form-control" name="nev" id="nev" required>
+                    <label class="form-label" for="termek_nev">Termék neve:</label>
+                    <input type="text" class="form-control" name="termek_nev" id="termek_nev" style="max-width: 100%" required>
 
                     <label class="form-label" for="kategoria">Kategória: </label>
                     <select class="form-select" name="kategoria" id="kategoria">
@@ -43,21 +37,26 @@ $kategoriak = $crudManager->performCRUD("select", "kategoriak", "", "");
 
                 </div>
             </form>
+            <?php require_once 'uzenet.php'?>
         </div>
         <div class="col-6 kistabla">
-            <h3 class="">Új termék feltöltése</h3><br>
+            <h4 class="">Új termék feltöltése</h4><br>
             <form class="row" enctype="multipart/form-data" method="post" action="termek_feltoltes.php">
                 <input type="file" name="file" accept=".csv"><br><br>
-                <input type="submit" name="submit" value="Feltöltés">
+                <input type="submit" name="submit" value="FELTÖLTÉS">
+            </form>
+            <hr>
+            <h4 class="">Termékek letöltése</h4><br>
+            <form class="row" method="post" action="termek_letoltes.php">
+
+                <input type="submit" name="submit" value="LETÖLTÉS">
             </form>
         </div>
     </div>
 </div>
 <br>
-<hr><br>
-
-<div class="kistabla" style="width: 100%">
-    <table class="table table-sm table-info table-borderless" id="table" data-show-header="true" data-pagination="true"
+<div class="kistabla text-center" id="tablediv">
+    <table class="table table-info table-borderless" id="table" data-show-header="true" data-pagination="true"
         data-id-field="name" data-page-list="[5, 10, 25, 50, 100, ALL]" data-page-size="5">
         <thead>
             <tr>
@@ -89,8 +88,6 @@ $kategoriak = $crudManager->performCRUD("select", "kategoriak", "", "");
             <?php endforeach; ?>
         </tbody>
     </table>
-    <!-- <a onclick="prevPage()" href='#' id="btn_prev">Prev</a>
-    <a onclick="nextPage()" href='#' id="btn_next">Next</a> -->
     <div class="pagination">
         <ul class="pagination justify-content-center">
             <li class="page-item">

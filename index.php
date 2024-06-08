@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KISKERESKEDELEM</title>
+    <title>NoHa WAREHOUSE</title>
     <script type="text/javascript" src="elemek/js/bootstrap.js"></script>
     <script src=""></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">

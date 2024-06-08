@@ -12,11 +12,10 @@
                 <a href="index.php?p=12" class="text-decoration-none px-2 text-black fw-bold">Profilom |</a>
                 <a href="index.php?p=13"><button type="button" class="btn btn-info fw-bold">Kijelentkezés</button></a>
             </div>
-
-            <!-- <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">
-          <input type="search" class="form-control form-control-dark text-bg-dark" placeholder="Search..." aria-label="Search">
-        </form> -->
-
+            <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" style="position: static; right: -50px" role="search" action="kereso.php" method="GET">
+                <input type="search" class="form-control" placeholder="Keresés..." aria-label="Search" name="search">
+                <button type="submit">Küldés</button>
+            </form>
 
             <?php else: ?>
                 <div class="text-end">

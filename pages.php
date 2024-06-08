@@ -15,5 +15,6 @@
     define("14", "profil_szerkeszt.php");
     define("13", "kijelentkezes.php");
     define("15", "kategoriak.php");
+    define("17", "talalat.php");
 
 ?>

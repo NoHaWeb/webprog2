@@ -57,9 +57,6 @@ $beosztasok = $db-> fall($query);
                                 endif; ?>> <?php echo $beo['beo_nev'] ?></option>
                     <?php endforeach; ?>
                 </select>
-
-                    <!-- <input type="text" name="beosztas" id="beosztas" value="<?php echo $beosztas['beo_nev']; ?>" required disabled>
-                    <input type="hidden" name="jogosultsag" id="jogosultsag" value="<?php echo $jogosultsag ?>" required disabled> -->
                 </td>
             </pre>
         </tr>
@@ -68,18 +65,20 @@ $beosztasok = $db-> fall($query);
                 <button type="button" id="szerkeszt">SZERKESZT</button>
             </td>
             <td>
-                <input type="submit" value="JÓVÁHAGY" disabled>
+                <input type="submit" value="JÓVÁHAGY" disabled hidden>
             </td>
         </tr>
     </table>
 </form>
+<?php require_once 'uzenet.php'?>
 <script>
     const enableButton = document.getElementById("szerkeszt");
     const inputs = document.querySelectorAll("input[disabled]");
     const selectoptions = document.getElementById("beosztas");
 
     enableButton.addEventListener("click", function() {
-    inputs.forEach(input => input.disabled = false);
+    inputs.forEach(input => input.disabled = false)
+    inputs.forEach(input => input.hidden = false);
     selectoptions.disabled = false;
     });
 </script>

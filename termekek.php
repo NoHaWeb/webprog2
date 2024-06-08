@@ -1,24 +1,44 @@
 
 <?php
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $pdo = new PDO('mysql:hostname=localhost;dbname=web2', 'root', '');
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    require_once 'db_kapcsolat.php';
+    require_once 'crud.php';
 
-    $nev = $_POST['nev'];
+    $db = new Database();
+    $crudManager = new CRUDManager($db);
+
+    $termek_nev = $_POST['termek_nev'];
     $kategoria = $_POST['kategoria'];
     $id = $_POST['id'];
 
-    $termek_qry = "INSERT INTO termekek SET termek_nev = ?";
-    $statement = $pdo->prepare($termek_qry);
-    $statement->execute([$nev]);
+    $egyezo_termek = $crudManager->performCRUD("select", "termekek", "", "termek_nev = '$termek_nev'");
 
-    $stmt = $pdo->query('SELECT MAX(termek_id) AS latest_id FROM termekek');
-    $row = $stmt->fetch();
-    $latest_id = $row['latest_id'];
+    if (session_status() == PHP_SESSION_NONE) {
+        session_start(); // Session indítása, ha még nem indult el
+    }
+    if ($egyezo_termek) {
+        $_SESSION['message_nok'] = "Ez a termék: '"."$termek_nev"."', már létezik!";
+        header("Location: index.php?p=3");
+        exit();
+    } else {
+        $data = ['termek_nev' => $termek_nev ];
+        $crudManager->performCRUD("insert", "termekek", $data, "");
 
-    $kategoria_qry = "INSERT INTO termek_kategoriak SET termek_id = ?, kategoria_id = ?";
-    $statement = $pdo->prepare($kategoria_qry);
-    $statement->execute([$latest_id, $kategoria]);
-    header('Location:index.php?p=3');
+        $stmt = $db -> executeQuery('SELECT MAX(termek_id) AS latest_id FROM termekek');
+        $row = $stmt->fetch();
+        $latest_id = $row['latest_id'];
+
+        $data = [
+            'termek_id' => $latest_id,
+            'kategoria_id' => $kategoria,
+        ];
+        $crudManager->performCRUD("insert", "termek_kategoriak", $data, "");
+        // $kategoria_qry = "INSERT INTO termek_kategoriak SET termek_id = ?, kategoria_id = ?";
+       
+        $_SESSION['message_ok'] = "<span class='highlight'>".$termek_nev."</span> sikeresen felvéve a termékekhez.";
+        header('Location: index.php?p=3');
+        exit();
+    }
 }
+$db->closeConnection();
 ?>
