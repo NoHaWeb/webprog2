@@ -70,6 +70,7 @@ $beosztasok = $db-> fall($query);
         </tr>
     </table>
 </form>
+<br>
 <?php require_once 'uzenet.php'?>
 <script>
     const enableButton = document.getElementById("szerkeszt");

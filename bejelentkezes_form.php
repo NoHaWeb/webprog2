@@ -16,5 +16,5 @@
         <td><input type="submit" value="Bejelentkezés"></td>
     </tr>
 </form>
-
+<?php require_once 'uzenet.php'?>
 </table>

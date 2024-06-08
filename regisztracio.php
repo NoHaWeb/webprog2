@@ -40,41 +40,48 @@
 
         // Hibák kiírása vagy sikeres üzenet
         if (!empty($errors)) {
-            foreach ($errors as $error) {
-                echo "<p style='color: red;'>$error</p>";
+            if (session_status() == PHP_SESSION_NONE) {
+                session_start(); // Session indítása, ha még nem indult el
             }
+            foreach ($errors as $error) {
+                $_SESSION['message_nok'] = $error;
+                header("Location: index.php?p=2");
+            }
+            exit();
         } else {
-            $pdo = new PDO('mysql:host=localhost;dbname=web2', 'root', '',
-            array(PDO::ATTR_ERRMODE=>PDO::ERRMODE_EXCEPTION));
+            require_once 'db_kapcsolat.php';
+            require_once 'crud.php';
+            $db = new Database();
+            $crudManager = new CRUDManager($db);
 
-            $query = "SELECT * FROM felhasznalok WHERE felhasznalonev = :felhasznalo";
-            $statement = $pdo->prepare($query);
-            $statement->execute(array(':felhasznalo' => $felhasznalo));
-            $row = $statement->fetch(PDO::FETCH_ASSOC);
+            $nev = trim($_POST["nev"]);
+            $felhasznalo = trim($_POST["felhasznalo"]);
+            $jelszo = trim($_POST["jelszo"]);
+            $auth = trim($_POST["beosztas"]);
+            
+            $row = $crudManager->performCRUD("select", "felhasznalok", "", "felhasznalonev = '$felhasznalo'");
+
             if($row) {
-            echo "A felhasználónév már foglalt!<br>";
-            echo "Vissza a regisztrációhoz: <a href='index.php?oldal=2'>Regisztráció</a>";
+                if (session_status() == PHP_SESSION_NONE) {
+                    session_start(); // Session indítása, ha még nem indult el
+                }
+                $_SESSION['message_nok'] = "A(z) ".$felhasznalo." felhasználónév már foglalt!";
+                header("Location: index.php?p=2");
             die();
             }
-
-
-
-            $query = "INSERT INTO felhasznalok (nev, felhasznalonev, jelszo, auth) VALUES (:nev, :felhasznalo, :jelszo, :auth)";
-            $statement = $pdo->prepare($query);
-
-            $jelszo = md5($jelszo);
-            $statement->execute(
-            array(
-                ':nev' => $nev, 
-                ':felhasznalo' => $felhasznalo, 
-                ':jelszo' => $jelszo,
-                ':auth' => $auth
-            )
-            );
-
-            echo "Sikeres regisztráció! Az Ön azonosítója: " . $pdo->lastInsertId();
-            echo "<br>";
-            echo "Tovább a bejelentkezésre: <a href='index.php'>Bejelentkezés</a>";
+           $jelszo = md5($jelszo);
+           $data= [
+                'nev' => $nev, 
+                'felhasznalonev' => $felhasznalo, 
+                'jelszo' => $jelszo,
+                'auth' => $auth
+           ];
+            $crudManager->performCRUD("insert", "felhasznalok", $data, "");
+            if (session_status() == PHP_SESSION_NONE) {
+                session_start(); // Session indítása, ha még nem indult el
+            }
+            $_SESSION['message_ok'] = "A ".$felhasznalo." felhasználónév sikeresen létrehozva!";
+            header("Location: index.php?p=1");
         }
     }
 

@@ -1,10 +1,11 @@
 <?php
+require_once 'db_kapcsolat.php';
+require_once 'crud.php';
 
-$pdo = new PDO('mysql:host=localhost;dbname=web2', 'root', '');
-$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+$db = new Database();
+$crudManager = new CRUDManager($db);
 
-$query = "SELECT * FROM beosztasok";
-$beok = $pdo->query($query)->fetchAll(PDO::FETCH_OBJ);
+$beok = $crudManager->performCRUD("select", "beosztasok", "", "");
 
 ?>
 <h1>KISKERESKEDELEM</h1>
@@ -30,10 +31,11 @@ $beok = $pdo->query($query)->fetchAll(PDO::FETCH_OBJ);
             <td>
                 <select id="beosztas" name="beosztas">
                     <?php foreach($beok as $beo): ?>
-                        <option value="<?php echo $beo->beo_id ?>"><?php echo $beo->beo_nev ?></option>
+                        <option value="<?php echo $beo['beo_id']?>"><?php echo $beo['beo_nev'] ?></option>
                     <?php endforeach; ?>
                 </select>
             </td>
+            <?php require_once 'uzenet.php'?>
         </tr>
         <tr>
             <td><input type="submit" value="Regisztráció"></td>

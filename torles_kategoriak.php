@@ -1,11 +1,12 @@
 <?php
-    $pdo = new PDO('mysql:host=localhost;dbname=web2', 'root', '');
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    require_once 'db_kapcsolat.php';
+    require_once 'crud.php';
 
-    $query = "DELETE FROM kategoriak WHERE kategoria_id = ?";
-    $statement = $pdo->prepare($query);
-    $statement->execute([$_POST['kategoria_id']]);
-
+    $db = new Database();
+    $crudManager = new CRUDManager($db);
+    $kategoria_id = $_POST['kategoria_id'];
+    
+    $crudManager->performCRUD("delete", "kategoriak", "", "kategoria_id = '$kategoria_id'");
 
     header('Location: index.php?p=15');
 

@@ -7,6 +7,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $felhasznalonev = trim($_POST["felhasznalonev"]);
     $auth = trim($_POST["beosztas"]);
 
+
     // Üres mezők ellenőrzése
     if (empty($nev) || empty($felhasznalonev)) {
         $errors[] = "Minden mező kitöltése kötelező!";
@@ -32,16 +33,38 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
         exit();
     } else {
-        $pdo = new PDO('mysql:hostname=localhost;dbname=web2', 'root', '');
-        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        require_once 'db_kapcsolat.php';
+        require_once 'crud.php';
+
+        $db = new Database();
+        $crudManager = new CRUDManager($db);
 
         $nev = trim($_POST["nev"]);
         $felhasznalonev = trim($_POST["felhasznalonev"]);
         $auth = trim($_POST["beosztas"]);
+        $member_id = $_POST['id'];
 
-        $query = "UPDATE felhasznalok SET nev = ?, felhasznalonev = ?, auth = ? WHERE id = ?";
-        $statement = $pdo->prepare($query);
-        $statement->execute([$nev, $felhasznalonev, $auth, $_POST['id']]);
+        $row = $crudManager->performCRUD("select", "felhasznalok", "", "felhasznalonev = '$felhasznalonev' AND NOT id ='$member_id' ");
+        if($row) {
+            if (session_status() == PHP_SESSION_NONE) {
+                session_start(); // Session indítása, ha még nem indult el
+            }
+            $_SESSION['message_nok'] = "A ".$felhasznalonev." felhasználónév már foglalt!";
+           header("Location: index.php?p=12");
+        die();
+        }
+
+        $data = [
+            'nev' => $nev,
+            'felhasznalonev' => $felhasznalonev,
+            'auth' => $auth
+        ];
+        $results = $crudManager->performCRUD("update", "felhasznalok", $data, "id = '$member_id'");
+
+        // $query = "UPDATE felhasznalok SET nev = ?, felhasznalonev = ?, auth = ? WHERE id = ?";
+        // $statement = $pdo->prepare($query);
+        // $statement->execute([$nev, $felhasznalonev, $auth, $_POST['id']]);
+
         session_start();
         $_SESSION['auth'] = $auth;
         session_write_close();
@@ -53,7 +76,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $_SESSION['message_ok'] = "A módosítás sikeresen megtörtént.";
         header('Location: index.php?p=12');
         exit();
-        }
+         }
     }
 
 ?>
